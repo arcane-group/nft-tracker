@@ -1,5 +1,5 @@
 import type { NextPage } from "next"
-import DashboardData from "../components/DashboardDAta"
+import DashboardData from "../components/DashboardData"
 
 const Home: NextPage = () => {
   return (
