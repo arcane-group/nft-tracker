@@ -20,20 +20,20 @@ const Watchlist: NextPage = () => {
 
   const checkAddressValidity = () => {}
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+  // useEffect(() => {
+  //   fetchData()
+  // }, [])
 
   return (
     <div className='flex justify-center text-white font-roboto'>
       <div>
-        <h1 className='py-3'>
+        <h1 className='py-3 text-center'>
           Address:
           <input
             type='text'
             onChange={handleInputChange}
             value={userAddress}
-            className='bg-black ml-2 w-2/3'
+            className='bg-black ml-2 w-1/3 border border-slate-200 rounded px-2 py-1'
           />
         </h1>
         <div>

@@ -19,11 +19,11 @@ const Header = () => {
             <p className='flex items-center'>Watchlist</p>
           </button>
         </Link>
-        {/* <Link href='/bot' passHref>
+        <Link href='/bot' passHref>
           <button className='underline underline-offset-4 rounded-lg px-4 py-2 text-xl'>
             Minting Bot
           </button>
-        </Link> */}
+        </Link>
       </div>
     </div>
   )
