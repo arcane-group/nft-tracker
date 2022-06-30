@@ -57,13 +57,6 @@ const Watchlist: NextPage = () => {
     setSearchAddress(e.target.value)
   }
 
-  // const filterData = () => {
-  //   const filtered = txnData.filter(
-  //     (txn) => txn.from === "0x0000000000000000000000000000000000000000"
-  //   )
-  //   setFilteredData(filtered)
-  // }
-
   const displayTxns = filteredData.map((txn) => {
     return (
       <TxnData
@@ -76,8 +69,6 @@ const Watchlist: NextPage = () => {
       />
     )
   })
-
-  // const checkAddressValidity = () => {}
 
   return (
     <div className='flex justify-center text-white font-roboto'>
@@ -96,12 +87,6 @@ const Watchlist: NextPage = () => {
           >
             Search
           </button>
-          {/* <button
-            className='border border-white px-2 py-1'
-            onClick={filterData}
-          >
-            Filter
-          </button> */}
         </div>
         <div>
           <table className='table-auto'>
