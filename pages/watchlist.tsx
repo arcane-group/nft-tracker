@@ -33,8 +33,12 @@ const Watchlist: NextPage = () => {
       `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
     )
     const res = await response.json()
-    console.log("res:", res.result)
-    setTxnData(res.result)
+    console.log("res:", res)
+    if (res.status !== "1") {
+      alert("api call rate exceeded")
+    } else {
+      setTxnData(res.result)
+    }
   }
 
   const handleInputChange = (e: any) => {
@@ -42,16 +46,18 @@ const Watchlist: NextPage = () => {
     setSearchAddress(e.target.value)
   }
 
-  const displayTxns = txnData.map((txn) => (
-    <TxnData
-      key={txn.hash}
-      from={txn.from}
-      to={txn.to}
-      tokenName={txn.tokenName}
-      contractAddress={txn.contractAddress}
-      txHash={txn.hash}
-    />
-  ))
+  const displayTxns = txnData.map((txn) => {
+    return (
+      <TxnData
+        key={txn.hash}
+        from={txn.from}
+        to={txn.to}
+        tokenName={txn.tokenName}
+        contractAddress={txn.contractAddress}
+        txHash={txn.hash}
+      />
+    )
+  })
 
   // const checkAddressValidity = () => {}
 
@@ -77,14 +83,13 @@ const Watchlist: NextPage = () => {
           <table className='table-auto'>
             <thead className='text-xl'>
               <tr className='border-b py-2 space-x-4'>
-                <th className='px-4'>From</th>
+                <th className='px-4'>Contract Address</th>
                 <th className='px-4'>To</th>
                 <th className='px-4'>Token Name</th>
-                <th className='px-4'>Contract Address</th>
                 <th className='px-4'>Txn Hash</th>
               </tr>
             </thead>
-            <tbody>{displayTxns}</tbody>
+            <tbody>{txnData && displayTxns}</tbody>
           </table>
         </div>
       </div>
