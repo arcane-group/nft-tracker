@@ -2,27 +2,58 @@ import type { NextPage } from "next"
 import { useEffect, useState } from "react"
 import TxnData from "../components/TxnData"
 
+interface TxnData {
+  blockHash: string
+  blockNumber: string
+  confirmations: string
+  contractAddress: string
+  cumulativeGasUsed: string
+  from: string
+  gas: string
+  gasPrice: string
+  gasUsed: string
+  hash: string
+  input: string
+  nonce: string
+  timeStamp: string
+  to: string
+  tokenDecimal: string
+  tokenID: string
+  tokenName: string
+  tokenSymbol: string
+  transactionIndex: string
+}
+
 const Watchlist: NextPage = () => {
-  const [userAddress, setUserAddress] = useState<string>(
-    "0x6975be450864c02b4613023c2152ee0743572325"
-  )
-  const fetchData = async () => {
+  const [searchAddress, setSearchAddress] = useState<string>()
+  const [txnData, setTxnData] = useState<TxnData[]>([])
+
+  const submitQuery = async () => {
     const response = await fetch(
-      `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${userAddress}&page=1&offset=110&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.ETHERSCAN_API_KEY}`
+      `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
     )
     const res = await response.json()
-    console.log("res:", res)
+    console.log("res:", res.result)
+    setTxnData(res.result)
   }
 
   const handleInputChange = (e: any) => {
     console.log("event:", e.target.value)
+    setSearchAddress(e.target.value)
   }
 
-  const checkAddressValidity = () => {}
+  const displayTxns = txnData.map((txn) => (
+    <TxnData
+      key={txn.hash}
+      from={txn.from}
+      to={txn.to}
+      tokenName={txn.tokenName}
+      contractAddress={txn.contractAddress}
+      txHash={txn.hash}
+    />
+  ))
 
-  // useEffect(() => {
-  //   fetchData()
-  // }, [])
+  // const checkAddressValidity = () => {}
 
   return (
     <div className='flex justify-center text-white font-roboto'>
@@ -32,9 +63,15 @@ const Watchlist: NextPage = () => {
           <input
             type='text'
             onChange={handleInputChange}
-            value={userAddress}
-            className='bg-black ml-2 w-1/3 border border-slate-200 rounded px-2 py-1'
+            value={searchAddress}
+            className='bg-black mx-2 w-1/3 border border-slate-200 rounded px-2 py-1'
           />
+          <button
+            className='border border-white px-2 py-1'
+            onClick={submitQuery}
+          >
+            Search
+          </button>
         </h1>
         <div>
           <table className='table-auto'>
@@ -43,15 +80,11 @@ const Watchlist: NextPage = () => {
                 <th className='px-4'>From</th>
                 <th className='px-4'>To</th>
                 <th className='px-4'>Token Name</th>
-                <th className='px-4'>Token ID</th>
-                <th className='px-4'>Transaction Hash</th>
+                <th className='px-4'>Contract Address</th>
+                <th className='px-4'>Txn Hash</th>
               </tr>
             </thead>
-            <tbody>
-              <TxnData />
-              <TxnData />
-              <TxnData />
-            </tbody>
+            <tbody>{displayTxns}</tbody>
           </table>
         </div>
       </div>
