@@ -21,7 +21,7 @@ const Header = () => {
         </Link>
         <Link href='/bot' passHref>
           <button className='underline underline-offset-4 rounded-lg px-4 py-2 text-xl'>
-            Mint Bot
+            Free Mints
           </button>
         </Link>
       </div>

@@ -7,22 +7,27 @@ import { useMoralisWeb3Api } from "react-moralis"
 interface apiOptions {
   chain: any
   address: any
+  token_address: any
 }
+
+// "0xbf92a355c73de74969a75258e02a15a2764d4970"
 
 const Bot: NextPage = () => {
   const Web3Api = useMoralisWeb3Api()
-  const fetchSearchNFTs = async () => {
+
+  const fetchNFTsForContract = async () => {
     const options: apiOptions = {
       chain: "eth",
-      address: "0xbf92a355c73de74969a75258e02a15a2764d4970",
+      address: "0x4C36B84b2974604e0fEA458198F30864a70481E0",
+      token_address: "0xbf92a355c73de74969a75258e02a15a2764d4970",
     }
-    const NFTs = await Web3Api.token.getAllTokenIds(options)
-    console.log(NFTs)
+    const NFTs = await Web3Api.account.getNFTsForContract(options)
+    console.log(NFTs.result)
   }
 
   useEffect(() => {
-    if (Web3Api) {
-      fetchSearchNFTs()
+    if (!!Web3Api) {
+      fetchNFTsForContract()
     } else {
       console.log("false")
     }

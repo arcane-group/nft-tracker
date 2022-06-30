@@ -1,3 +1,5 @@
+import { ExternalLinkIcon } from "@heroicons/react/outline"
+
 interface MintProps {
   name: string
   totalSupply: any
@@ -15,7 +17,7 @@ const MintData = (nft: MintProps) => {
           "-"
         ) : (
           <a href={nft.opensea} target='_blank' rel='noreferrer'>
-            OS Page
+            <ExternalLinkIcon className='h-5 w-5 text-white' />
           </a>
         )}
       </td>
@@ -24,7 +26,7 @@ const MintData = (nft: MintProps) => {
           "-"
         ) : (
           <a href={nft.etherscan} target='_blank' rel='noreferrer'>
-            Contract Mint
+            <ExternalLinkIcon className='h-5 w-5 text-white' />
           </a>
         )}
       </td>
