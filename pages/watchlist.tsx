@@ -27,17 +27,28 @@ interface TxnData {
 const Watchlist: NextPage = () => {
   const [searchAddress, setSearchAddress] = useState<string>()
   const [txnData, setTxnData] = useState<TxnData[]>([])
+  const [filteredData, setFilteredData] = useState<TxnData[]>([])
 
   const submitQuery = async () => {
-    const response = await fetch(
-      `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
-    )
-    const res = await response.json()
-    console.log("res:", res)
-    if (res.status !== "1") {
-      alert("api call rate exceeded")
+    if (searchAddress) {
+      const response = await fetch(
+        `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
+      )
+      const res = await response.json()
+      console.log("res:", res)
+      if (res.status !== "1") {
+        alert("api call rate exceeded")
+      } else {
+        const data = res.result
+        setTxnData(data)
+        const filtered = data.filter(
+          (txn: any) =>
+            txn.from === "0x0000000000000000000000000000000000000000"
+        )
+        setFilteredData(filtered)
+      }
     } else {
-      setTxnData(res.result)
+      alert("please enter a valid address")
     }
   }
 
@@ -46,7 +57,14 @@ const Watchlist: NextPage = () => {
     setSearchAddress(e.target.value)
   }
 
-  const displayTxns = txnData.map((txn) => {
+  // const filterData = () => {
+  //   const filtered = txnData.filter(
+  //     (txn) => txn.from === "0x0000000000000000000000000000000000000000"
+  //   )
+  //   setFilteredData(filtered)
+  // }
+
+  const displayTxns = filteredData.map((txn) => {
     return (
       <TxnData
         key={txn.hash}
@@ -64,8 +82,8 @@ const Watchlist: NextPage = () => {
   return (
     <div className='flex justify-center text-white font-roboto'>
       <div>
-        <h1 className='py-3 text-center'>
-          Address:
+        <div className='mb-10'>
+          <h1 className='py-3 text-center inline'>Enter Query Address:</h1>
           <input
             type='text'
             onChange={handleInputChange}
@@ -78,7 +96,13 @@ const Watchlist: NextPage = () => {
           >
             Search
           </button>
-        </h1>
+          {/* <button
+            className='border border-white px-2 py-1'
+            onClick={filterData}
+          >
+            Filter
+          </button> */}
+        </div>
         <div>
           <table className='table-auto'>
             <thead className='text-xl'>
@@ -89,7 +113,7 @@ const Watchlist: NextPage = () => {
                 <th className='px-4'>Txn Hash</th>
               </tr>
             </thead>
-            <tbody>{txnData && displayTxns}</tbody>
+            <tbody>{filteredData && displayTxns}</tbody>
           </table>
         </div>
       </div>
