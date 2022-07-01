@@ -1,4 +1,5 @@
 import type { NextPage } from "next"
+import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 import TxnData from "../components/TxnData"
 import { validateAddress } from "../helpers"
@@ -30,8 +31,16 @@ const Watchlist: NextPage = () => {
   const [txnData, setTxnData] = useState<TxnData[]>([])
   const [filteredData, setFilteredData] = useState<TxnData[]>([])
 
+  const resolveENS = async (input: string) => {
+    const provider = await ethers.getDefaultProvider("homestead", {
+      alchemy: process.env.ALCHEMY_API_KEY,
+    })
+    const address = await provider.resolveName(input)
+    return address
+  }
+
   const submitQuery = async () => {
-    if (validateAddress(searchAddress)) {
+    if (searchAddress) {
       const response = await fetch(
         `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
       )
@@ -75,7 +84,14 @@ const Watchlist: NextPage = () => {
   }
 
   const handleInputChange = (e: any) => {
-    setSearchAddress(e.target.value)
+    const addr = e.target.value
+    const suffix = addr.slice(addr.length - 4)
+    if (validateAddress(addr)) {
+      setSearchAddress(addr)
+    } else if (suffix === ".eth") {
+      const hexAddr = resolveENS(addr)
+      setSearchAddress(hexAddr)
+    }
   }
 
   const displayTxns = filteredData.map((txn) => {
