@@ -12,7 +12,15 @@ interface TxnProps {
 const TxnData = (txn: TxnProps) => {
   return (
     <tr className='border-b border-dotted'>
-      <td className='pr-8 py-2'>{txn.contractAddress}</td>
+      <td className='pr-8 py-2 hover:underline'>
+        <a
+          href={"https://etherscan.io/token/" + txn.contractAddress}
+          target='_blank'
+          rel='noreferrer'
+        >
+          {txn.contractAddress}
+        </a>
+      </td>
       <td className='pr-8 py-2'>{txn.to}</td>
       <td className='pr-8 py-2'>{txn.tokenName}</td>
       <td className='pr-8 py-2'>

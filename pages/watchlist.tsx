@@ -94,12 +94,11 @@ const Watchlist: NextPage = () => {
   return (
     <div className='flex justify-center text-white font-roboto'>
       <div>
-        <div className='mb-10'>
+        <div className='mb-10 mx-10'>
           <h1 className='py-3 text-center inline'>Enter Query Address:</h1>
           <input
             type='text'
             onChange={handleInputChange}
-            value={searchAddress}
             className='bg-black mx-2 w-1/3 border border-slate-200 rounded px-2 py-1'
           />
           <button
@@ -110,7 +109,7 @@ const Watchlist: NextPage = () => {
           </button>
         </div>
         <div>
-          <table className='table-auto'>
+          <table className='table-auto mx-10'>
             <thead className='text-xl'>
               <tr className='border-b py-2 space-x-4'>
                 <th className='px-4'>Contract Address</th>
