@@ -10,8 +10,6 @@ interface apiOptions {
   token_address: any
 }
 
-// "0xbf92a355c73de74969a75258e02a15a2764d4970"
-
 const Bot: NextPage = () => {
   const Web3Api = useMoralisWeb3Api()
 
@@ -25,13 +23,11 @@ const Bot: NextPage = () => {
     console.log(NFTs.result)
   }
 
-  useEffect(() => {
-    if (!!Web3Api) {
-      fetchNFTsForContract()
-    } else {
-      console.log("false")
-    }
-  }, [Web3Api])
+  // useEffect(() => {
+  //   if (!!Web3Api) {
+  //     fetchNFTsForContract()
+  //   }
+  // }, [Web3Api])
 
   const nftInfo = botData.map((nft) => {
     return (

@@ -1,6 +1,7 @@
 import type { NextPage } from "next"
 import { useEffect, useState } from "react"
 import TxnData from "../components/TxnData"
+import { validateAddress } from "../helpers"
 
 interface TxnData {
   blockHash: string
@@ -25,19 +26,22 @@ interface TxnData {
 }
 
 const Watchlist: NextPage = () => {
-  const [searchAddress, setSearchAddress] = useState<string>()
+  const [searchAddress, setSearchAddress] = useState<any>()
   const [txnData, setTxnData] = useState<TxnData[]>([])
   const [filteredData, setFilteredData] = useState<TxnData[]>([])
 
   const submitQuery = async () => {
-    if (searchAddress) {
+    if (validateAddress(searchAddress)) {
       const response = await fetch(
         `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`
       )
       const res = await response.json()
       console.log("res:", res)
       if (res.status !== "1") {
-        alert("api call rate exceeded")
+        console.log("api call rate exceeded")
+        // alert("api call rate exceeded")
+
+        submitBackupQuery()
       } else {
         const data = res.result
         setTxnData(data)
@@ -52,8 +56,25 @@ const Watchlist: NextPage = () => {
     }
   }
 
+  const submitBackupQuery = async () => {
+    const response = await fetch(
+      `https://api.etherscan.io/api?module=account&action=tokennfttx&address=${searchAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY2}`
+    )
+    const res = await response.json()
+    console.log("backup query res:", res)
+    if (res.status !== "1") {
+      alert("api call rate exceeded")
+    } else {
+      const data = res.result
+      setTxnData(data)
+      const filtered = data.filter(
+        (txn: any) => txn.from === "0x0000000000000000000000000000000000000000"
+      )
+      setFilteredData(filtered)
+    }
+  }
+
   const handleInputChange = (e: any) => {
-    console.log("event:", e.target.value)
     setSearchAddress(e.target.value)
   }
 
