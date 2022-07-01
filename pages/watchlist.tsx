@@ -94,7 +94,7 @@ const Watchlist: NextPage = () => {
   return (
     <div className='flex justify-center text-white font-roboto'>
       <div>
-        <div className='mb-10 mx-10'>
+        <div className='mb-8 mx-10'>
           <h1 className='py-3 text-center inline'>Enter Query Address:</h1>
           <input
             type='text'
@@ -107,6 +107,9 @@ const Watchlist: NextPage = () => {
           >
             Search
           </button>
+          <p className='text-slate-300 text-sm mt-6'>
+            *Returns all ERC721 mints to requested address
+          </p>
         </div>
         <div>
           <table className='table-auto mx-10'>
